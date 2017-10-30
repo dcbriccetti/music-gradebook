@@ -278,7 +278,7 @@ class Students extends SelectedMusician with Photos with ChartFeatures with Loca
       instrumentId = mgm.mg.instrument_id
       opNextPieceName = for {
         lastPasses  <- lastPassesByMusician.get(musician.id)
-        lastPass    <- lastPasses.headOption
+        lastPass    <- lastPasses.find(_.instrumentId == instrumentId)
         nextPiece   <- Cache.nextPiece(lastPass.piece)
       } yield nextPiece.name.get
     } yield EnqueuedMusician(musician, instrumentId, opNextPieceName | Cache.pieces.head.name.get)
