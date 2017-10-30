@@ -8,11 +8,11 @@ import com.dbschools.mgb.schema._
 import SchoolYears.toTs
 
 class LastPassFinder {
-  val pieces = Cache.pieces
-  val piecesById = pieces.map(p => p.id -> p).toMap
-  val pieceOrderToId = pieces.map(p => p.testOrder.get -> p.id).toMap
-  val numPieces = pieces.size
-  lazy val pieceIdToPosition = pieces.sortBy(_.testOrder.get).map(_.id).zipWithIndex.toMap
+  val pieces: Seq[Piece] = Cache.pieces
+  val piecesById: Map[Int, Piece] = pieces.map(p => p.id -> p).toMap
+  val pieceOrderToId: Map[Int, Int] = pieces.map(p => p.testOrder.get -> p.id).toMap
+  val numPieces: Int = pieces.size
+  lazy val pieceIdToPosition: Map[Int, Int] = pieces.sortBy(_.testOrder.get).map(_.id).zipWithIndex.toMap
 
   def lastPassed(
       musicianId: Option[Int]       = None,
@@ -39,10 +39,10 @@ class LastPassFinder {
 
 case class LastPass(musicianId: Int, instrumentId: Int, opSubinstrumentId: Option[Int],
     piece: Piece, testOrder: Int, position: Int) {
-  def subinstruments(id: Int) = Cache.subinstruments.find(_.id == id)
-  def instrumentName(id: Int) = Cache.instruments.find(_.id == id).map(_.name.get)
-  override def toString = formatted(withInstrument = true)
-  def formatted(withInstrument: Boolean = false) = {
+  def subinstruments(id: Int): Option[Subinstrument] = Cache.subinstruments.find(_.id == id)
+  def instrumentName(id: Int): Option[String] = Cache.instruments.find(_.id == id).map(_.name.get)
+  override def toString: String = formatted(withInstrument = true)
+  def formatted(withInstrument: Boolean = false): String = {
     val opSi = opSubinstrumentId.flatMap(subinstruments)
     piece.name.get + (if (withInstrument) " on " + ~instrumentName(instrumentId) + ~opSi.map(Subinstrument.suffix) else "")
   }
