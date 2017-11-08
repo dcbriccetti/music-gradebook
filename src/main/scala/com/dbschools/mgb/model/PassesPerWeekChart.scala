@@ -16,7 +16,7 @@ object PassesPerWeekChart {
     val entireSchoolYear = svStatsDisplay.is == StatsDisplay.Year
 
     val testRows = AssessmentRows(opMusicianId, limit = Int.MaxValue).filter { test =>
-      entireSchoolYear || terms.containing(test.date) == terms.current }
+      entireSchoolYear || terms.highestDateTermBefore(test.date).exists(_ == terms.current) }
 
     val testingWeekNums = entireSchoolYear ? Cache.activeTestingWeeks.forSchoolYear(SchoolYears.current) |
       Cache.activeTestingWeeks.forSchoolTerm(SchoolYears.current, terms.yearStart, terms.current)

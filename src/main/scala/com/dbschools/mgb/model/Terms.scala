@@ -13,17 +13,16 @@ import net.liftweb.util.Props
   */
 class Terms(opTermDates: Option[Iterable[String]]) {
   /** Term start dates, ordered from most recent to least */
-  private val startDates: Seq[DateTime] = {
+  private val startDatesDesc: Seq[DateTime] = {
     val parser = ISODateTimeFormat.dateTimeParser()
     (opTermDates |
       Props.get("terms").openOrThrowException("terms property missing").split(',')).
       map(parser.parseDateTime).toSeq.sortBy(_.getMillis).reverse
   }
 
-  def current: DateTime = startDates.find(_.getMillis < DateTime.now.getMillis).get
+  def current: DateTime = startDatesDesc.find(_.getMillis < DateTime.now.getMillis).get
 
-  def yearStart: DateTime = startDates.last
+  def yearStart: DateTime = startDatesDesc.last
 
-  def containing(time: DateTime): DateTime = startDates.find(_.getMillis < time.getMillis).get
+  def highestDateTermBefore(time: DateTime): Option[DateTime] = startDatesDesc.find(_.getMillis < time.getMillis)
 }
-

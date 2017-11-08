@@ -82,7 +82,8 @@ object Exporter {
     val musicianIds = svGroupAssignments.is.map(_.musician.id)
     val allYear = svStatsDisplay.is == StatsDisplay.Year
     val filteredRows = AssessmentRows(None, limit = Int.MaxValue).filter { ar =>
-      (musicianIds contains ar.musician.id) && (allYear || terms.containing(ar.date) == terms.current) }
+      (musicianIds contains ar.musician.id) &&
+        (allYear || terms.highestDateTermBefore(ar.date).exists(_ == terms.current)) }
     // todo Select only the needed rows from the database, rather than filtering after selecting
     val sortedAssessments = filteredRows.toList.sortBy(ar =>
       (ar.musician.nameLastFirstNick, -ar.date.getMillis))

@@ -73,10 +73,18 @@ object Cache {
       }
       orderBy(a.musician_id, a.assessment_time)).groupBy(_.musicianId)
 
+    case class TermAndTest(dateTime: DateTime, musicianTestInfo: MusicianTestInfo)
+
     testsByMusician.map {
       case (musicianId, testInfos) =>
+        val termAndTests = for {
+          musicianTestInfo <- testInfos.toSeq
+          dateTime <- terms.highestDateTermBefore(musicianTestInfo.time)
+        } yield TermAndTest(dateTime, musicianTestInfo)
         val testInfosByTerm: Map[Option[DateTime], Seq[MusicianTestInfo]] =
-          testInfos.toSeq.groupBy(mti => Some(terms.containing(mti.time)))
+            termAndTests.groupBy(termAndTest => Some(termAndTest.dateTime)).map {
+              case (someDateTime, tAndT) => (someDateTime, tAndT.map(_.musicianTestInfo))
+            }
         val statsForWholeTerm = none[DateTime] -> TestingStats(testsByMusician(musicianId))
         val testingStatsByTerm = testInfosByTerm.mapValues(TestingStats.apply) + statsForWholeTerm
         musicianId -> testingStatsByTerm
