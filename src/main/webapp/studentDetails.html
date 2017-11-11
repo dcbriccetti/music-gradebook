@@ -4,6 +4,10 @@
 <div id="main" class="lift:surround?with=default;at=content">
     <div data-lift="NewAssessment">
         <script language="JavaScript" src="js/metronome.js"></script>
+        <script>
+            let metronome = new Metronome();
+        </script>
+        <span data-lift="NewAssessment.metronomeSoundFileNames"></span>
         <span id="setTempo"></span>
         <span id="setMetroSoundNum"></span>
     </div>
@@ -103,10 +107,10 @@
                     <div data-lift="NewAssessment">
                         <div style="margin-bottom: 1em">
                             <span id="piece" class="input-lg"></span>
-                            <input id="metronome" class="btn btn-lg" style='margin-bottom: 3px; margin-left: 1em;'
-                                   type="button" value="Metronome" onclick="metro()"/>
+                            <input id="accurateMetronome" class="btn btn-lg" style='margin-bottom: 3px; margin-left: 1em;'
+                                   type="button" value="Metronome" onclick="metronome.toggle()"/>
                             <span id="metroSound" class="input-lg"></span>
-                            <input id="tempo" type="number" style='font-size: 120%' onChange="tempoBpm = this.value;">
+                            <input id="tempo" type="number" style='font-size: 120%' onChange="metronome.setTempo(this.value);">
                             <span id="instrument" class='input-lg' style='margin-left: 1em;'></span>
                             <span id="subinstrument" class='input-lg'></span>
                         </div>
@@ -171,8 +175,6 @@
         </script>
 
         <span data-lift='StudentDetails.js'></span>
-
-        <span data-lift="NewAssessment.audioControls"></span>
     </div>
 </div>
 </body>

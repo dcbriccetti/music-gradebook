@@ -12,7 +12,8 @@ import net.liftweb.util.CssSel
 import net.liftweb.http
 import http.{SHtml, Templates}
 import http.js.JsCmd
-import http.js.JsCmds.{Noop, Replace, ReplaceOptions, Script, SetHtml, SetValById}
+import http.js.JsCmds.{Noop, ReplaceOptions, Script, SetHtml, SetValById}
+import net.liftweb.http.js.JsCmds._
 import http.js.jquery.JqJsCmds
 import http.js.JE.JsRaw
 import net.liftweb.common.{Empty, Full}
@@ -30,15 +31,15 @@ class NewAssessment extends SelectedMusician {
   def render: CssSel = {
     val s = new AssessmentState(lastPassFinder)
 
-    def jsTempo = JsRaw(s"tempoBpm = ${s.tempoFromPiece}").cmd
+    def jsTempo = JsRaw(s"metronome.setTempo(${s.tempoFromPiece});").cmd
 
-    def jsMetroSoundNum = JsRaw(s"metroSoundNum = ${Authenticator.metronome};").cmd
+    def jsMetroSoundNum = JsRaw(s"metronome.setSound(${Authenticator.metronome});").cmd
 
     def tempoControl = SHtml.number(s.tempoFromPiece, (t: Int) => {}, min = 30, max = 180)
 
     def sendTempo: JsCmd = {
       val tempo = s.tempoFromPiece
-      JsJqVal("#tempo", tempo) & JsRaw(s"tempoBpm = $tempo;").cmd
+      JsJqVal("#tempo", tempo) & JsRaw(s"metronome.setTempo($tempo);").cmd
     }
 
     def selPiece = {
@@ -183,12 +184,8 @@ class NewAssessment extends SelectedMusician {
     "#failButton"     #> SHtml.ajaxSubmit("Fail", () => { recordAss(pass = false) })
   }
 
-  def audioControls: NodeSeq = {
-    MetroSounds.values.map(s => {
-      val filename = s.toString + ".wav"
-      <audio id={s"audioControl${s.id}"} src={s"assets/audio/$filename"} preload="auto">
-        Please use a standards-compliant browser.
-      </audio>
-    }).foldLeft(NodeSeq.Empty)(_ ++ _)
+  def metronomeSoundFileNames: NodeSeq = {
+    val soundFileNames = MetroSounds.values.toSeq.sortBy(_.id).map(name => s"'${name.toString}.wav'")
+    Script(JsRaw(s"metronome.loadMetronomeSounds(${soundFileNames.mkString("[", ", ", "]")});"))
   }
 }
