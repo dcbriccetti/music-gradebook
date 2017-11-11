@@ -45,6 +45,7 @@ class Boot {
     // Build SiteMap
     def sitemap = SiteMap(
       home.menu,
+      metronome.menu,
       logIn.menu                >> notLoggedIn,
       admin.menu                >> isAdmin,
       groups.menu               >> loggedIn,

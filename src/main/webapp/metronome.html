@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:lift="http://www.w3.org/1999/xhtml">
+<body class="lift:content_id=main">
+<div id="main" class="lift:surround?with=default;at=content">
+    <div data-lift="NewAssessment">
+        <script language="JavaScript" src="js/metronome.js"></script>
+        <script>
+            let metronome = new Metronome();
+        </script>
+        <span data-lift="NewAssessment.loadMetronomeSounds"></span>
+        <span id="setTempo"></span>
+        <span id="setMetroSoundNum"></span>
+    </div>
+
+    <p>This metronome knows the tempos for all the Standard of Excellence testing pieces.</p>
+    <!-- The following is duplicated from studentDetails.html (until we can get embedding it working) -->
+    <div data-lift="NewAssessment">
+        <div style="margin-bottom: 1em">
+            <span id="piece" class="input-lg"></span>
+            <input id="accurateMetronome" class="btn btn-lg" style='margin-bottom: 3px; margin-left: 1em;'
+                   type="button" value="Metronome" onclick="metronome.toggle()"/>
+            <span id="metroSound" class="input-lg"></span>
+            <input id="tempo" type="number" style='font-size: 120%' onChange="metronome.setTempo(this.value);">
+            <span id="instrument" class='input-lg' style='margin-left: 1em;'></span>
+            <span id="subinstrument" class='input-lg'></span>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

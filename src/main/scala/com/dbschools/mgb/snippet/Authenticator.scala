@@ -50,8 +50,6 @@ class Authenticator extends FormHelper {
     S.containerRequest.foreach(_.session.removeAttribute("loggedIn"))
     S.redirectTo(logIn.href)
   }
-
-  def goToLogin = Script(if (Authenticator.svLoggedInUser.is.nonEmpty) Noop else RedirectTo(logIn.href))
 }
 
 object Authenticator {

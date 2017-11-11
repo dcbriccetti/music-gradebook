@@ -3,8 +3,10 @@ package bootstrap.liftweb
 /** These are used to build the site menu, and to create inter-page links. */
 object ApplicationPaths {
   val home              = new Path("Home", "index")
+  val metronome         = new Path("Metronome", "metronome")
   val logIn             = new Path("Log In", "logIn")
   val logout            = new Path("Log Out", "logOut")
+
   val admin             = new Path("Admin", "admin")
 
   val noGroups          = new Path("No Groups", "noGroups")
