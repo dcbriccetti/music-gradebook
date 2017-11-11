@@ -184,7 +184,7 @@ class NewAssessment extends SelectedMusician {
     "#failButton"     #> SHtml.ajaxSubmit("Fail", () => { recordAss(pass = false) })
   }
 
-  def metronomeSoundFileNames: NodeSeq = {
+  def loadMetronomeSounds: NodeSeq = {
     val soundFileNames = MetroSounds.values.toSeq.sortBy(_.id).map(name => s"'${name.toString}.wav'")
     Script(JsRaw(s"metronome.loadMetronomeSounds(${soundFileNames.mkString("[", ", ", "]")});"))
   }
