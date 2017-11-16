@@ -33,7 +33,7 @@ class NewAssessment extends SelectedMusician {
 
     def jsTempo = JsRaw(s"metronome.setTempo(${s.tempoFromPiece});").cmd
 
-    def jsMetroSoundNum = JsRaw(s"metronome.setSound(${Authenticator.metronome});").cmd
+    def jsMetroSoundNum(num: Int = Authenticator.metronome) = JsRaw(s"metronome.setSound($num);").cmd
 
     def tempoControl = SHtml.number(s.tempoFromPiece, (t: Int) => {}, min = 30, max = 180)
 
@@ -55,8 +55,9 @@ class NewAssessment extends SelectedMusician {
       val sortedSounds = MetroSounds.values.toSeq.sortBy(_.id)
       SHtml.ajaxSelect(sortedSounds.map(s => s.id.toString -> s.toString.replace("_", " ")),
         Full(Authenticator.metronome.toString), (p) => {
-          Authenticator.metronome(p.toInt)
-          jsMetroSoundNum
+          val soundNumber = p.toInt
+          Authenticator.metronome(soundNumber)
+          jsMetroSoundNum(soundNumber)
         })
     }
 
@@ -176,7 +177,7 @@ class NewAssessment extends SelectedMusician {
     "#metroSound"     #> selMetroSound &
     "#tempo"          #> tempoControl &
     "#setTempo"       #> Script(jsTempo) &
-    "#setMetroSoundNum" #> Script(jsMetroSoundNum) &
+    "#setMetroSoundNum" #> Script(jsMetroSoundNum()) &
     "#checkbox1 *"    #> checkboxes(0) &
     "#checkbox2 *"    #> checkboxes(1) &
     "#commentText"    #> commentText &

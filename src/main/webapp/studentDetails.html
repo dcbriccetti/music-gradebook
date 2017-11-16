@@ -5,7 +5,7 @@
     <div data-lift="NewAssessment">
         <script language="JavaScript" src="js/metronome.js"></script>
         <script>
-            let metronome = new Metronome();
+            let metronome = new Metronome('assets/audio/');
         </script>
         <span data-lift="NewAssessment.loadMetronomeSounds"></span>
         <span id="setTempo"></span>
@@ -107,7 +107,7 @@
                     <div data-lift="NewAssessment">
                         <div style="margin-bottom: 1em">
                             <span id="piece" class="input-lg"></span>
-                            <input id="accurateMetronome" class="btn btn-lg" style='margin-bottom: 3px; margin-left: 1em;'
+                            <input id="metronome" class="btn btn-lg" style='margin-bottom: 3px; margin-left: 1em;'
                                    type="button" value="Metronome" onclick="metronome.toggle()"/>
                             <span id="metroSound" class="input-lg"></span>
                             <input id="tempo" type="number" style='font-size: 120%' onChange="metronome.setTempo(this.value);">
