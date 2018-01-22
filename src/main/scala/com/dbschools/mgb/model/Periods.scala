@@ -120,6 +120,7 @@ object Periods {
   )
 
   private val weekStandard = Vector(monFri, tue, wed, thu, monFri)
+  /** Special schedule for Stanley One Book One School event */
   private val weekAlt1 = Vector(monFriAlt1, tueAlt1, wedAlt1, thuAlt1, monFriAlt1)
 
   def periodWithin(dateTime: DateTime = DateTime.now): TimeClass = {
@@ -133,5 +134,6 @@ object Periods {
   def isDuringClassPeriod(dateTime: DateTime = DateTime.now): Boolean = periodWithin(dateTime).isInstanceOf[Period]
 
   private def getWeek(d: DateTime) =
-    if (d.getYear == 2017 && d.getMonthOfYear == 1) weekAlt1 else weekStandard
+    if (d.getYear == 2018 && d.getMonthOfYear == 1 &&
+      d.getDayOfMonth >= 8 && d.getDayOfMonth <= 25) weekAlt1 else weekStandard
 }
