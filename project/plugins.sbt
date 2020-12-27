@@ -1,7 +1,8 @@
-libraryDependencies <+= sbtVersion(v => "com.github.siasia" %% "xsbt-web-plugin" % "0.12.0-0.2.11.1")
+//Enable the sbt web plugin
+addSbtPlugin("com.earldouglas" % "xsbt-web-plugin" % "0.7.0")
 
-//Uncoment this line to enable the sbt idea plugin
-addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.5.1")
+//Enable the sbt idea plugin
+addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
 
-//Uncoment this line to enable the sbt eclipse plugin
-addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.2.0")
+//Enable the sbt eclipse plugin
+addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "4.0.0")

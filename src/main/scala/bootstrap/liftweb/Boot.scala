@@ -8,7 +8,6 @@ import http._
 import sitemap._
 import Loc._
 import com.dbschools.mgb.ExportStudentsRestHelper
-import net.liftmodules.widgets.flot.Flot
 import net.liftmodules.FoBo
 import com.dbschools.mgb.model.Cache
 import com.dbschools.mgb.dbconn.Db
@@ -74,7 +73,7 @@ class Boot {
     //Init the FoBo - Front-End Toolkit module,
     //see http://liftweb.net/lift_modules for more info
     FoBo.InitParam.JQuery=FoBo.JQuery191
-    FoBo.InitParam.ToolKit=FoBo.Bootstrap300
+    FoBo.InitParam.ToolKit=FoBo.Bootstrap311
     FoBo.init()
 
     //Show the spinny image when an Ajax call starts
@@ -96,6 +95,5 @@ class Boot {
 
     Db.initialize()
     Cache.init()
-    Flot.init()
   }
 }
