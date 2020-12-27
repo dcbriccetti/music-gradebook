@@ -14,16 +14,20 @@ case class TestingStats(
   outsideClassFailed:         Int,
   longestPassingStreakTimes:  Seq[DateTime],
   opTestingImprovement:       Option[TestingImprovement],
+  opLastTest:                 Option[DateTime],
   opLastInClassTest:          Option[DateTime],
   opLastOutsideClassTest:     Option[DateTime]
 ) {
   val NeededPassesPerInClassTestDay = 3
 
   def passesNeeded: Int = math.max(0, inClassDaysTested * NeededPassesPerInClassTestDay - totalPassed)
+  def passesNeededAnyDay: Int = math.max(0, (inClassDaysTested + outsideClassDaysTested) * NeededPassesPerInClassTestDay - totalPassed)
   def passesPerInClassTestDays: Double = if (inClassDaysTested != 0) totalPassed.toDouble / inClassDaysTested else 0
+  def passesPerTestDays: Double = if (totalDaysTested != 0) totalPassed.toDouble / totalDaysTested else 0
   def numTests: Int = totalPassed + totalFailed
   def percentPassed: Int = if (numTests == 0) 0 else math.round(totalPassed * 100.0 / numTests).toInt
   def testScorePercent: Double = math.min(100.0, passesPerInClassTestDays / NeededPassesPerInClassTestDay * 100)
+  def testScoreAllDaysPercent: Double = math.min(100.0, passesPerTestDays / NeededPassesPerInClassTestDay * 100)
 }
 
 object TestingStats {
@@ -48,6 +52,7 @@ object TestingStats {
       outsideClassTests.count(_.pass),
       outsideClassTests.count(!_.pass),
       longestStreak(mtis), OptionTestingImprovement(mtis),
+      maxDateTime(mtis),
       maxDateTime(inClassTests), maxDateTime(outsideClassTests))
   }
 

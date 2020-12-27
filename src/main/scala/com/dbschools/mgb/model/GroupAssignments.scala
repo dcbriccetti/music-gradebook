@@ -60,7 +60,7 @@ object GroupAssignments extends UserLoggable {
       case SortStudentsBy.Name =>
         selected.sortBy(_.musician.nameLastFirstNick)
       case SortStudentsBy.LastAssessment =>
-        selected.sortBy(ga => Cache.lastInClassTestTime(ga.musician.id).map(_.toDate) | longAgo)
+        selected.sortBy(ga => Cache.lastTestTime(ga.musician.id).map(_.toDate) | longAgo)
       case SortStudentsBy.LastPassed =>
         def pos(id: Int) = ~(
           for {

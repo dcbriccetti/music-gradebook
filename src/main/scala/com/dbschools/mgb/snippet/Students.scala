@@ -23,7 +23,7 @@ import bootstrap.liftweb.ApplicationPaths
 import schema.{AppSchema, Musician}
 import model._
 import model.TestingManagerMessages._
-import Cache.lastInClassTestTime
+import Cache.{lastInClassTestTime, lastTestTime}
 
 class Students extends SelectedMusician with Photos with ChartFeatures with LocationsGraph with Loggable {
   private val selectors = svSelectors.is
@@ -211,10 +211,12 @@ class Students extends SelectedMusician with Photos with ChartFeatures with Loca
       val now = DateTime.now
       groupAssignments.map(row => {
         val lastAsmtTime = lastInClassTestTime(row.musician.id)
+        val lastAnyAsmtTime = lastTestTime(row.musician.id)
         val opStats = Cache.selectedTestingStatsByMusician(row.musician.id)
         def stat(fn: TestingStats => Int) = ~opStats.map(fn)
         def statd(fn: TestingStats => Double) = ~opStats.map(fn)
         val passed  = stat(_.totalPassed)
+        val totalDaysTested = stat(_.totalDaysTested)
         val inClassDaysTested = stat(_.inClassDaysTested)
         def bz /* blank if zero */[A](value: A) =
           if (value == 0) "" else value.toString
@@ -233,12 +235,10 @@ class Students extends SelectedMusician with Photos with ChartFeatures with Loca
         ".instr    *" #> row.instrument.name.get &
         ".passed *"           #> bz(passed) &
         ".failed *"           #> bz(stat(_.totalFailed)) &
-        ".passedX *"          #> bz(stat(_.outsideClassPassed)) &
-        ".failedX *"          #> bz(stat(_.outsideClassFailed)) &
-        ".inClassDaysTested *" #> bz(inClassDaysTested) &
-        ".avgPassedPerDay *"  #> (if (inClassDaysTested == 0) "" else nfmt.format(passed.toFloat / inClassDaysTested)) &
-        ".lastAss  *"   #> ~lastAsmtTime.map(fmt.print) &
-        ".testScorePct *"     #> (nfmt0.format(statd(_.testScorePercent)) + "%") &
+        ".totalDaysTested *" #> bz(totalDaysTested) &
+        ".avgPassedPerDay *"  #> (if (totalDaysTested == 0) "" else nfmt.format(passed.toFloat / totalDaysTested)) &
+        ".lastAss *"          #> ~lastAnyAsmtTime.map(fmt.print) &
+        ".testScorePct *"     #> (nfmt0.format(statd(_.testScoreAllDaysPercent)) + "%") &
         ".passesNeeded *"     #> bz(stat(_.passesNeeded)) &
         ".passStreak *"       #> stat(_.longestPassingStreakTimes.size) &
         ".lastPass *"         #> formatLastPasses(row)

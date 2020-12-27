@@ -50,6 +50,14 @@ object Cache {
     } yield lastInClassTest
   }
 
+  def lastTestTime(musicianId: Int): Option[DateTime] = {
+    for {
+      statsForMusicianByMester  <- testingStatsByMusician.get(musicianId)
+      testingStats              <- statsForMusicianByMester.get(None)
+      lastTest                  <- testingStats.opLastTest
+    } yield lastTest
+  }
+
   private def readGroups      = inT {AppSchema.groups.toSeq.sortBy(_.name)}
   private def readGroupTerms  = inT {AppSchema.groupTerms.toList}
   private def readInstruments = inT {AppSchema.instruments.toSeq.sortBy(_.sequence.get)}
